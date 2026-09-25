@@ -1,0 +1,774 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DataShield Academy - Защита личных данных</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #050914;
+            --card-bg: #0c1322;
+            --terminal-bg: #0a0f1a;
+            --accent-cyan: #00e5ff;
+            --accent-red: #ff4d4d;
+            --accent-green: #00ff88;
+            --accent-orange: #ff5722;
+            --text-main: #ffffff;
+            --text-muted: #8a94a6;
+            --border-color: #1c273c;
+            --font-main: 'Inter', sans-serif;
+            --font-mono: 'Courier New', Courier, monospace;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: var(--font-main);
+            line-height: 1.5;
+            overflow-x: hidden;
+            padding-bottom: 80px; /* Отступ для нижней навигации */
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* --- Кнопки --- */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+            text-transform: uppercase;
+        }
+
+        .btn-primary {
+            background-color: var(--accent-cyan);
+            color: #000;
+        }
+
+        .btn-primary:hover {
+            background-color: #00b8cc;
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            color: var(--text-main);
+            border: 1px solid var(--border-color);
+            text-transform: none;
+        }
+
+        .btn-outline:hover {
+            border-color: var(--text-muted);
+        }
+
+        /* --- Шапка --- */
+        header {
+            padding: 20px 0;
+            border-bottom: 1px solid var(--border-color);
+            background-color: rgba(5, 9, 20, 0.8);
+            backdrop-filter: blur(10px);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 800;
+            font-size: 18px;
+            letter-spacing: 1px;
+        }
+
+        .logo-icon {
+            width: 30px;
+            height: 30px;
+            background-color: var(--accent-cyan);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #000;
+            font-size: 16px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+            font-size: 14px;
+            color: var(--text-muted);
+        }
+
+        .nav-links a:hover {
+            color: var(--text-main);
+        }
+
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            font-size: 14px;
+        }
+
+        /* --- Главная секция (Hero) --- */
+        .hero {
+            padding: 80px 0;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 50px;
+            align-items: center;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background-color: rgba(0, 255, 136, 0.1);
+            color: var(--accent-green);
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            margin-bottom: 20px;
+            border: 1px solid rgba(0, 255, 136, 0.2);
+        }
+
+        .hero-badge::before {
+            content: '';
+            width: 6px;
+            height: 6px;
+            background-color: var(--accent-green);
+            border-radius: 50%;
+        }
+
+        .hero h1 {
+            font-size: 64px;
+            line-height: 1.1;
+            font-weight: 800;
+            text-transform: uppercase;
+            margin-bottom: 25px;
+        }
+
+        .hero h1 span {
+            color: var(--accent-cyan);
+        }
+
+        .hero p {
+            color: var(--text-muted);
+            font-size: 16px;
+            margin-bottom: 40px;
+            max-width: 90%;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 15px;
+        }
+
+        /* Терминал */
+        .terminal-container {
+            background-color: var(--terminal-bg);
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+            position: relative;
+        }
+
+        .terminal-header {
+            background-color: #121a2a;
+            padding: 12px 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+        .dot.red { background-color: #ff5f56; }
+        .dot.yellow { background-color: #ffbd2e; }
+        .dot.green { background-color: #27c93f; }
+
+        .terminal-title {
+            color: var(--text-muted);
+            font-size: 12px;
+            margin-left: 10px;
+            font-family: var(--font-mono);
+        }
+
+        .terminal-body {
+            padding: 20px;
+            font-family: var(--font-mono);
+            font-size: 14px;
+            line-height: 1.8;
+        }
+
+        .terminal-body .line { color: var(--text-muted); }
+        .terminal-body .warning { color: var(--accent-red); }
+        .terminal-body .info { color: var(--accent-cyan); }
+        .terminal-body .success { color: var(--accent-green); }
+
+        .terminal-alert {
+            margin: 0 20px 20px 20px;
+            padding: 15px;
+            background-color: rgba(255, 77, 77, 0.1);
+            border: 1px solid rgba(255, 77, 77, 0.3);
+            border-radius: 8px;
+        }
+
+        .terminal-alert-title {
+            color: var(--accent-red);
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 5px;
+        }
+
+        .terminal-alert p {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin: 0;
+        }
+
+        /* --- Секция Особенности (Почему DataShield) --- */
+        .features {
+            padding: 80px 0;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .section-header {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            margin-bottom: 50px;
+            align-items: end;
+        }
+
+        .section-subtitle {
+            color: var(--accent-cyan);
+            font-family: var(--font-mono);
+            font-size: 14px;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+        }
+
+        .section-title {
+            font-size: 42px;
+            font-weight: 800;
+            text-transform: uppercase;
+            line-height: 1.2;
+        }
+
+        .section-desc {
+            color: var(--text-muted);
+            font-size: 16px;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+        }
+
+        .feature-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 30px 20px;
+            transition: transform 0.3s;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(0, 229, 255, 0.3);
+        }
+
+        .feature-icon {
+            width: 40px;
+            height: 40px;
+            background-color: rgba(0, 229, 255, 0.1);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--accent-cyan);
+            font-size: 20px;
+            margin-bottom: 20px;
+        }
+
+        .feature-card h3 {
+            font-size: 18px;
+            margin-bottom: 15px;
+        }
+
+        .feature-card p {
+            color: var(--text-muted);
+            font-size: 14px;
+        }
+
+        /* --- Секция Курсы --- */
+        .courses {
+            padding: 80px 0;
+        }
+
+        .courses-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px;
+        }
+
+        .courses-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 25px;
+        }
+
+        .course-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .course-image {
+            height: 160px;
+            background: linear-gradient(135deg, #1c273c 0%, #0c1322 100%);
+            position: relative;
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        .course-tag {
+            background-color: rgba(255, 255, 255, 0.1);
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 600;
+            backdrop-filter: blur(5px);
+        }
+
+        .course-tag.free {
+            background-color: rgba(0, 229, 255, 0.2);
+            color: var(--accent-cyan);
+        }
+
+        .course-tag.new {
+            background-color: rgba(255, 87, 34, 0.2);
+            color: var(--accent-orange);
+        }
+
+        .course-content {
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+        }
+
+        .course-meta {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-bottom: 10px;
+        }
+
+        .course-title {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            flex-grow: 1;
+        }
+
+        .course-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid var(--border-color);
+            padding-top: 15px;
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        .course-students {
+            color: var(--text-muted);
+            font-weight: 400;
+        }
+
+        .course-price.free {
+            color: var(--accent-cyan);
+        }
+
+        /* --- Секция CTA --- */
+        .cta {
+            padding: 100px 0;
+            text-align: center;
+            border-top: 1px solid var(--border-color);
+            background: radial-gradient(circle at center, rgba(0,229,255,0.05) 0%, transparent 70%);
+        }
+
+        .cta-subtitle {
+            color: var(--accent-cyan);
+            font-family: var(--font-mono);
+            font-size: 14px;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+        }
+
+        .cta-title {
+            font-size: 48px;
+            font-weight: 800;
+            text-transform: uppercase;
+            line-height: 1.2;
+            margin-bottom: 20px;
+            max-width: 900px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .cta-title span {
+            color: var(--accent-red);
+        }
+
+        .cta-desc {
+            color: var(--text-muted);
+            margin-bottom: 40px;
+        }
+
+        /* --- Нижняя навигация (Плавающая) --- */
+        .bottom-nav {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: rgba(12, 19, 34, 0.9);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--border-color);
+            border-radius: 50px;
+            display: flex;
+            padding: 6px;
+            gap: 5px;
+            z-index: 1000;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        .bottom-nav a {
+            padding: 10px 20px;
+            border-radius: 40px;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-muted);
+            transition: all 0.3s;
+        }
+
+        .bottom-nav a.active {
+            background-color: var(--accent-orange);
+            color: #fff;
+        }
+
+        .bottom-nav a:hover:not(.active) {
+            color: var(--text-main);
+            background-color: rgba(255,255,255,0.05);
+        }
+
+        /* --- Плавающая кнопка помощи --- */
+        .help-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background-color: rgba(12, 19, 34, 0.9);
+            border: 1px solid var(--border-color);
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            font-weight: bold;
+            cursor: pointer;
+            z-index: 1000;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        .help-btn:hover {
+            color: var(--text-main);
+            border-color: var(--text-muted);
+        }
+
+        /* --- Адаптивность --- */
+        @media (max-width: 1024px) {
+            .hero { grid-template-columns: 1fr; }
+            .features-grid { grid-template-columns: repeat(2, 1fr); }
+            .courses-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links { display: none; }
+            .hero h1 { font-size: 42px; }
+            .section-header { grid-template-columns: 1fr; }
+            .features-grid { grid-template-columns: 1fr; }
+            .courses-grid { grid-template-columns: 1fr; }
+            .cta-title { font-size: 32px; }
+            .bottom-nav { width: 90%; justify-content: space-around; }
+            .bottom-nav a { padding: 10px; font-size: 12px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Шапка сайта -->
+    <header>
+        <div class="container nav-container">
+            <div class="logo">
+                <div class="logo-icon">🛡️</div>
+                <div>DATASHIELD<br><span style="font-size: 10px; color: var(--text-muted); font-weight: 400;">ACADEMY</span></div>
+            </div>
+            <nav class="nav-links">
+                <a href="#">Курсы</a>
+                <a href="#">Угрозы</a>
+                <a href="#">Для организаций</a>
+                <a href="#">Блог</a>
+            </nav>
+            <div class="nav-actions">
+                <a href="#">Войти</a>
+                <button class="btn btn-primary">Защититься сейчас</button>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <!-- Секция 1: Hero -->
+        <section class="hero container">
+            <div class="hero-text">
+                <div class="hero-badge">Угроза утечки данных реальна</div>
+                <h1>Защити свои <span>личные<br>данные</span><br>в интернете</h1>
+                <p>Каждые 39 секунд в мире происходит кибератака. Научитесь защищать себя, свою семью и данные — на практических курсах от экспертов по кибербезопасности.</p>
+                <div class="hero-buttons">
+                    <button class="btn btn-primary">Начать бесплатно →</button>
+                    <button class="btn btn-outline">▶ Посмотреть урок</button>
+                </div>
+            </div>
+            
+            <div class="hero-terminal">
+                <div class="terminal-container">
+                    <div class="terminal-header">
+                        <div class="dot red"></div>
+                        <div class="dot yellow"></div>
+                        <div class="dot green"></div>
+                        <div class="terminal-title">datashield — security-check</div>
+                    </div>
+                    <div class="terminal-body">
+                        <div class="line">> Сканирование устройства...</div>
+                        <div class="warning">> Обнаружено: 3 слабых пароля</div>
+                        <div class="line">> Проверка утечек email...</div>
+                        <div class="warning">> Найдено в 2 утечках данных</div>
+                        <div class="info">> Рекомендация: пройти курс #2</div>
+                        <div class="success">> Защита активирована ✓</div>
+                    </div>
+                    <div class="terminal-alert">
+                        <div class="terminal-alert-title">⚠️ Ваши данные могли утечь</div>
+                        <p>По данным HaveIBeenPwned, почта 1 из 3 россиян засвечена в утечках. Проверьте свои аккаунты на курсе.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Секция 2: Особенности -->
+        <section class="features container">
+            <div class="section-header">
+                <div>
+                    <div class="section-subtitle">// Почему DataShield</div>
+                    <h2 class="section-title">Знание – лучший<br>антивирус</h2>
+                </div>
+                <div class="section-desc">
+                    Большинство утечек данных происходит не из-за хакеров, а из-за незнания. Мы даём практические навыки, которые работают сразу.
+                </div>
+            </div>
+            
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">🛡️</div>
+                    <h3>Актуальные угрозы 2025-2026</h3>
+                    <p>Курсы обновляются каждый квартал — разбираем реальные утечки, новые схемы мошенников и свежие уязвимости</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🔒</div>
+                    <h3>Практические симуляции</h3>
+                    <p>Интерактивные задания в изолированной среде: распознайте фишинг, настройте 2FA, проверьте свои устройства</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">⏱️</div>
+                    <h3>Обучение за 30 дней</h3>
+                    <p>Структурированная программа: от азов до уверенной защиты всех своих аккаунтов и данных</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🎓</div>
+                    <h3>Сертификат о прохождении</h3>
+                    <p>Подтвердите свои знания сертификатом DataShield Academy — признаным работодателями в сфере IT и финтех</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Секция 3: Курсы -->
+        <section class="courses container">
+            <div class="courses-header">
+                <h2 class="section-title">Учебная программа</h2>
+                <button class="btn btn-outline">Все курсы →</button>
+            </div>
+            
+            <div class="courses-grid">
+                <!-- Карточка 1 -->
+                <div class="course-card">
+                    <div class="course-image">
+                        <span class="course-tag free">FREE</span>
+                        <span class="course-tag">Базовый</span>
+                    </div>
+                    <div class="course-content">
+                        <div class="course-meta">Начинающий • 8 часов • 12 уроков</div>
+                        <h3 class="course-title">Основы защиты персональных данных</h3>
+                        <div class="course-footer">
+                            <span class="course-students">14 320 студентов</span>
+                            <span class="course-price free">Бесплатно</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Карточка 2 -->
+                <div class="course-card">
+                    <div class="course-image">
+                        <span class="course-tag">Практика</span>
+                    </div>
+                    <div class="course-content">
+                        <div class="course-meta">Начинающий • 5 часов • 8 уроков</div>
+                        <h3 class="course-title">Надёжные пароли и двухфакторная аутентификация</h3>
+                        <div class="course-footer">
+                            <span class="course-students">9 850 студентов</span>
+                            <span class="course-price">1 490 ₽</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Карточка 3 -->
+                <div class="course-card">
+                    <div class="course-image">
+                        <span class="course-tag">Угрозы</span>
+                    </div>
+                    <div class="course-content">
+                        <div class="course-meta">Средний • 10 часов • 15 уроков</div>
+                        <h3 class="course-title">Фишинг и социальная инженерия: распознать и защититься</h3>
+                        <div class="course-footer">
+                            <span class="course-students">6 240 студентов</span>
+                            <span class="course-price">2 490 ₽</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Карточка 4 -->
+                <div class="course-card">
+                    <div class="course-image">
+                        <span class="course-tag">Приватность</span>
+                    </div>
+                    <div class="course-content">
+                        <div class="course-meta">Средний • 6 часов • 10 уроков</div>
+                        <h3 class="course-title">VPN, Tor и анонимность в сети</h3>
+                        <div class="course-footer">
+                            <span class="course-students">4 120 студентов</span>
+                            <span class="course-price">1 990 ₽</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Карточка 5 -->
+                <div class="course-card">
+                    <div class="course-image">
+                        <span class="course-tag new">НОВЫЙ</span>
+                        <span class="course-tag">Семья</span>
+                    </div>
+                    <div class="course-content">
+                        <div class="course-meta">Начинающий • 4 часа • 6 уроков</div>
+                        <h3 class="course-title">Безопасность детей в интернете</h3>
+                        <div class="course-footer">
+                            <span class="course-students">3 500 студентов</span>
+                            <span class="course-price">990 ₽</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Карточка 6 -->
+                <div class="course-card">
+                    <div class="course-image">
+                        <span class="course-tag">Право</span>
+                    </div>
+                    <div class="course-content">
+                        <div class="course-meta">Продвинутый • 14 часов • 20 уроков</div>
+                        <h3 class="course-title">GDPR, ФЗ-152 и права цифрового гражданина</h3>
+                        <div class="course-footer">
+                            <span class="course-students">1 200 студентов</span>
+                            <span class="course-price">3 490 ₽</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Секция 4: CTA -->
+        <section class="cta container">
+            <div class="cta-subtitle">// Действуй сейчас</div>
+            <h2 class="cta-title">Каждый день без защиты – это <span>риск для ваших данных</span></h2>
+            <p class="cta-desc">Первый курс «Основы защиты персональных данных» — бесплатно. Без карты. Начните сегодня.</p>
+            <button class="btn btn-primary" style="padding: 16px 32px; font-size: 16px;">Начать защиту бесплатно</button>
+        </section>
+    </main>
+
+    <!-- Плавающая нижняя навигация -->
+    <div class="bottom-nav">
+        <a href="#" class="active">Главная</a>
+        <a href="#">Урок</a>
+        <a href="#">Регистрация</a>
+        <a href="#">Brandbook</a>
+    </div>
+
+    <!-- Плавающая кнопка помощи -->
+    <div class="help-btn">?</div>
+
+</body>
+</html>
